@@ -1,0 +1,52 @@
+{
+  "name": "safeio",
+  "version": "0.0.1",
+  "description": "A streamlined CLI and npm package for effortless management of Safe multisig wallets.",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/types/index.d.ts",
+  "bin": {
+    "safeio": "./bin/safeio.js",
+    "safecli": "./bin/safeio.js"
+  },
+  "scripts": {
+    "build": "npm run build:cjs && npm run build:esm && npm run build:types",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "safe wallet",
+    "multisig wallets",
+    "gnosis safe",
+    "ethereum wallet",
+    "wallets commandline",
+    "batch wallet execution",
+    "safe",
+    "cli"
+  ],
+  "files": [
+    "lib",
+    "bin",
+    "package.json",
+    "README.md",
+    "README.zh-CN.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ioplustech/safeio.git"
+  },
+  "author": "cosin2077,wirender,ioplus.tech",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ioplustech/safeio/issues"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.4",
+    "typescript": "^5.5.4"
+  }
+}
