@@ -7,18 +7,10 @@ Read this in other languages: English | [简体中文](./README.zh-CN.md)
 ## Installation
 
 ```bash
-npm install -g safeio
+npm install safeio
 ```
 
 ## Usage
-
-### As a CLI tool
-
-```bash
-safeio [command] [options]
-```
-
-### As an npm package
 
 ```javascript
 const safeio = require('safeio');
