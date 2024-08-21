@@ -4,6 +4,12 @@ import { optionsKeys } from "./config";
 import { checkAddress } from "./checker";
 import type { IOptions } from "./index.d";
 import AxiosFetchWrapper from "./fetch";
+import Safe, {
+  SafeConfig,
+  SafeConfigWithSafeAddress,
+  SigningMethod,
+} from "@safe-global/protocol-kit";
+import { SafeCore } from "./service/safeCore";
 
 // TODO
 type Fn = () => void | Promise<void>;
@@ -21,13 +27,18 @@ export class SafeIO {
   ETHREUM_RPC?: string;
   CHAIN_ID: string = "1";
   FROM_CHAIN: string = "ethereum";
+
   SAFE_CLIENT_URL?: string;
   SAFE_ADDRESS_LIST: string[] = [];
   SAFE_ADDRESS_ACTIVE?: string;
+
   OWNER_LIST: ethers.Wallet[] = [];
   OWNER_ADDRESS_ACTIVE?: string;
+  OWNER_ACTIVE?: ethers.Wallet;
   // safeClientApi: AxiosFetchWrapper;
   safeClientService: SafeClientService;
+  safeSDK: Safe | null = null;
+  safeCore: SafeCore;
 
   constructor(options: IOptions | undefined) {
     this.initOptions(options);
@@ -35,6 +46,23 @@ export class SafeIO {
       CHAIN_ID: this.CHAIN_ID,
       SAFE_CLIENT_URL: this.SAFE_CLIENT_URL!,
     });
+    this.safeCore = new SafeCore({});
+  }
+  async createSafeSDK({
+    provider,
+    signer,
+    safeAddress,
+  }: SafeConfigWithSafeAddress) {
+    return await this.safeCore.getSDK({ provider, signer, safeAddress });
+  }
+  async initSafeSDK() {
+    if (this.safeSDK) return this.safeSDK;
+    const safeConfig: SafeConfig = {
+      provider: this.ETHREUM_RPC!,
+      signer: this.OWNER_ACTIVE?.address!,
+      safeAddress: this.SAFE_ADDRESS_ACTIVE!,
+    };
+    this.safeSDK = await this.createSafeSDK(safeConfig);
   }
   initOptions(options: IOptions | undefined) {
     if (!options) return;
@@ -78,6 +106,20 @@ export class SafeIO {
   async fromJSON(json: string, password: string) {
     const wallet = ethers.Wallet.fromEncryptedJsonSync(json, password);
     this.addOwner(wallet);
+  }
+  async listSafes() {
+    await this.initSafeSDK();
+    const safes = await this.safeClientService.getSafes(
+      await this.OWNER_ACTIVE!.getAddress()
+    );
+    return safes;
+  }
+  async listOwners() {
+    await this.initSafeSDK();
+    const safes = await this.safeClientService.getSafeInfo(
+      this.SAFE_ADDRESS_ACTIVE!
+    );
+    return safes;
   }
   setSafeAddress(address: string) {
     checkAddress(address);

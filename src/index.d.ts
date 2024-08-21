@@ -12,6 +12,9 @@ type SafeInfoAddress = {
   name?: string | null;
   logoUri?: string | null;
 };
+export type SafeCoreOptions = {
+  value?: string;
+};
 type StringOrNull = string | null;
 
 export interface SafeInfo {
