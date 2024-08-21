@@ -1,6 +1,6 @@
 # safeio
 
-safeio 是一个简化的命令行工具和 npm 包，用于轻松管理 Safe 多签钱包。
+safeio 是一个用于轻松管理 Safe 多签钱包的 npm 包，。
 
 ## 安装
 

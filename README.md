@@ -1,6 +1,6 @@
 # safeio
 
-A streamlined CLI and npm package for effortless management of Safe multisig wallets.
+A npm package for effortless management of Safe multisig wallets.
 
 Read this in other languages: English | [简体中文](./README.zh-CN.md)
 
