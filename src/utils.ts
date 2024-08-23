@@ -1,32 +1,32 @@
-import { ethers } from "ethers";
+import { ethers } from 'ethers'
 
 const setTimeout = (
   ms: number,
   fn?: () => void
 ): Promise<void> & { clear: () => void } => {
-  let timeoutId: NodeJS.Timeout;
+  let timeoutId: NodeJS.Timeout
   const promise = new Promise<void>((resolve) => {
     timeoutId = global.setTimeout(() => {
-      fn?.();
-      resolve();
-    }, ms);
-  }) as Promise<void> & { clear: () => void };
+      fn?.()
+      resolve()
+    }, ms)
+  }) as Promise<void> & { clear: () => void }
 
   promise.clear = () => {
     if (timeoutId) {
-      clearTimeout(timeoutId);
+      clearTimeout(timeoutId)
     }
-  };
+  }
 
-  return promise;
-};
+  return promise
+}
 
-type RetryOptions = {
-  maxTry?: number;
-  timeout?: number;
-  retryDelay?: number;
-  onRetry?: (attempt: number, error: Error) => void;
-};
+interface RetryOptions {
+  maxTry?: number
+  timeout?: number
+  retryDelay?: number
+  onRetry?: (attempt: number, error: Error) => void
+}
 
 export const safeTryFn = async <T>(
   fn: () => Promise<T>,
@@ -36,35 +36,35 @@ export const safeTryFn = async <T>(
     maxTry = 3,
     timeout = 5000,
     retryDelay = 3000,
-    onRetry = (attempt, error) =>
-      console.log(`Attempt ${attempt} failed: ${error.message}. Retrying...`),
-  } = options;
+    onRetry = (attempt, error) => { console.log(`Attempt ${attempt} failed: ${error.message}. Retrying...`) }
+  } = options
 
   for (let attempt = 1; attempt <= maxTry; attempt++) {
     try {
-      let isTimeout = false;
-      const timeoutPromise = setTimeout(timeout, () => (isTimeout = true));
-      const result = await Promise.race([fn(), timeoutPromise]);
-      timeoutPromise.clear();
+      let isTimeout = false
+      const timeoutPromise = setTimeout(timeout, () => (isTimeout = true))
+      const result = await Promise.race([fn(), timeoutPromise])
+      timeoutPromise.clear()
       if (isTimeout) {
-        console.log(`timeout!`);
-        throw new Error("timeout!");
+        console.log('timeout!')
+        throw new Error('timeout!')
       }
+
       // If the function completed successfully (even if it returned undefined or null), return the result
-      return result!;
+      if (result) return result
     } catch (error) {
       if (attempt < maxTry) {
-        onRetry(attempt, error as Error);
-        await setTimeout(retryDelay);
+        onRetry(attempt, error as Error)
+        await setTimeout(retryDelay)
       } else {
         throw new Error(
-          `safeTryFn ${fn.name} error. failed after ${maxTry} attempts. Last error: ${error}`
-        );
+          `safeTryFn ${fn.name} error. failed after ${maxTry} attempts. Last error: ${(error as Error).message}`
+        )
       }
     }
   }
 
-  return null; // Return null if all attempts fail
-};
+  return null
+}
 
-const isAddress = (val: string) => ethers.utils.isAddress(val);
+export const isAddress = (val: string) => ethers.utils.isAddress(val)

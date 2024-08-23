@@ -28,7 +28,3 @@ const safeio = require('safeio');
 ## Documentation
 
 For detailed documentation, please visit our [GitHub repository](https://github.com/ioplustech/safeio).
-
-## License
-
-ISC
