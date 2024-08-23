@@ -8,6 +8,6 @@
     "esModuleInterop": true,
     "project": "tsconfig.json"
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.test.ts"]
+  "include": ["src", "tests"],
+  "exclude": ["node_modules"]
 }

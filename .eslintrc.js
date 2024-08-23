@@ -13,7 +13,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: './tsconfig.json'
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: ['.eslintrc.js', 'jest.config.js'],
   rules: {
     'no-bitwise': 0,
     indent: [
