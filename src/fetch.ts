@@ -12,10 +12,8 @@ class AxiosFetchWrapper {
       }
     })
 
-    // Request interceptor
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) =>
-        // Uncomment the following lines if you want to use random User-Agent and X-Forwarded-For
         // config.headers['User-Agent'] = this.getRandomUserAgent();
         // config.headers['X-Forwarded-For'] = this.getRandomIP();
         config

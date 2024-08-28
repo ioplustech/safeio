@@ -1,23 +1,18 @@
 import { checkSafeConfig } from '../checker'
-import type { SafeCoreOptions } from '../index.d'
 import Safe, { type SafeConfig } from '@safe-global/protocol-kit'
-
-type Options = {
-  safeConfig?: SafeConfig
-  safeCoreOptions?: SafeCoreOptions
-} | null
+import type { SafeInitOptions, SafeOptions } from './controller'
 
 export class SafeCore {
   safeConfig?: SafeConfig = { signer: '', provider: '', safeAddress: '' }
-  safeCoreOptions?: SafeCoreOptions
+  options?: SafeInitOptions
   safeSDK: Safe | null = null
   SDKMap = new Map<any, Safe>()
 
-  constructor (options: Options) {
-    if (!options) return
-    const { safeConfig, safeCoreOptions } = options
+  constructor (opts: SafeOptions) {
+    if (!opts) return
+    const { safeConfig, options } = opts
     this.safeConfig = safeConfig
-    this.safeCoreOptions = safeCoreOptions
+    this.options = options
   }
 
   async getSDK (safeConfig: SafeConfig) {

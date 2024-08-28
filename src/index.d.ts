@@ -3,18 +3,12 @@ export interface IOptions {
   SAFE_CLIENT_URL?: string
 }
 
-export interface SafeClientServiceOptions {
-  CHAIN_ID: string
-  SAFE_CLIENT_URL: string
-}
 interface SafeInfoAddress {
   value: string
   name?: string | null
   logoUri?: string | null
 }
-export interface SafeCoreOptions {
-  value?: string
-}
+
 type StringOrNull = string | null
 
 export interface SafeInfo {
